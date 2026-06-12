@@ -51,27 +51,6 @@ const clearBtn = document.getElementById('clearBtn');
 
 // Initialization
 function init() {
-    // Generate time options for selects
-    function generateTimeOptions(selectEl) {
-        for (let h = 0; h < 24; h++) {
-            for (let m of ['00', '30']) {
-                const hourStr = h.toString().padStart(2, '0');
-                const timeStr24 = `${hourStr}:${m}`;
-                const ampm = h >= 12 ? 'PM' : 'AM';
-                let h12 = h % 12;
-                h12 = h12 ? h12 : 12;
-                const timeStr12 = `${h12.toString().padStart(2, '0')}:${m} ${ampm}`;
-                
-                const option = document.createElement('option');
-                option.value = timeStr24;
-                option.innerText = timeStr12;
-                selectEl.appendChild(option);
-            }
-        }
-    }
-    generateTimeOptions(startTimeInput);
-    generateTimeOptions(endTimeInput);
-
     // Set default date to today
     dateInput.valueAsDate = new Date();
     
@@ -217,8 +196,8 @@ function saveRecord(e) {
     db.collection('records').add(newRecord);
     
     // Reset form
-    startTimeInput.selectedIndex = 0;
-    endTimeInput.selectedIndex = 0;
+    startTimeInput.value = '';
+    endTimeInput.value = '';
     breakTimeInput.value = "0";
     calculatedHoursEl.innerText = '0';
     
@@ -395,8 +374,8 @@ exportBtn.addEventListener('click', () => {
 
 // Clear Form Fields
 clearBtn.addEventListener('click', () => {
-    startTimeInput.selectedIndex = 0;
-    endTimeInput.selectedIndex = 0;
+    startTimeInput.value = '';
+    endTimeInput.value = '';
     breakTimeInput.value = "0";
     hourlyRateInput.value = '';
     calculatedHoursEl.innerText = '0';
