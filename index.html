@@ -36,8 +36,20 @@
                             </select>
                         </div>
                     </div>
-                    <div class="input-group">
-                        <p class="calculated-hours-text">Total: <span id="calculatedHours">0</span> horas</p>
+                    <div class="time-inputs-row" style="align-items: center;">
+                        <div class="input-group">
+                            <label for="breakTime">Descanso (Lunch)</label>
+                            <select id="breakTime" required>
+                                <option value="0">Sin descanso (0 min)</option>
+                                <option value="0.5">30 min</option>
+                                <option value="1">1 hora</option>
+                                <option value="1.5">1.5 horas</option>
+                                <option value="2">2 horas</option>
+                            </select>
+                        </div>
+                        <div class="input-group" style="text-align: right;">
+                            <p class="calculated-hours-text" style="margin: 0; padding-top: 10px;">Total: <span id="calculatedHours">0</span> horas</p>
+                        </div>
                     </div>
                     <div class="time-inputs-row">
                         <div class="input-group">

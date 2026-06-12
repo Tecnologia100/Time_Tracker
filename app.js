@@ -28,6 +28,7 @@ const form = document.getElementById('recordForm');
 const dateInput = document.getElementById('date');
 const startTimeInput = document.getElementById('startTime');
 const endTimeInput = document.getElementById('endTime');
+const breakTimeInput = document.getElementById('breakTime');
 const calculatedHoursEl = document.getElementById('calculatedHours');
 const hourlyRateInput = document.getElementById('hourlyRate');
 const statusInput = document.getElementById('status');
@@ -161,6 +162,7 @@ function to12hFormat(time24) {
 function calculateHours() {
     const start = startTimeInput.value;
     const end = endTimeInput.value;
+    const breakTime = parseFloat(breakTimeInput.value) || 0;
     if (start && end) {
         const [startH, startM] = start.split(':').map(Number);
         const [endH, endM] = end.split(':').map(Number);
@@ -173,7 +175,8 @@ function calculateHours() {
         if (diffHours < 0) {
             diffHours += 24; // Handle passing midnight
         }
-        const total = diffHours + (diffMins / 60);
+        let total = diffHours + (diffMins / 60);
+        total = Math.max(0, total - breakTime); // Restar descanso
         calculatedHoursEl.innerText = total.toFixed(2).replace(/\.00$/, '');
         return total;
     }
@@ -183,6 +186,7 @@ function calculateHours() {
 
 startTimeInput.addEventListener('change', calculateHours);
 endTimeInput.addEventListener('change', calculateHours);
+breakTimeInput.addEventListener('change', calculateHours);
 
 // Data operations
 function saveRecord(e) {
@@ -195,10 +199,12 @@ function saveRecord(e) {
     }
     
     const rate = parseFloat(hourlyRateInput.value) || 0;
+    const breakTime = parseFloat(breakTimeInput.value) || 0;
     const newRecord = {
         date: dateInput.value,
         startTime: startTimeInput.value,
         endTime: endTimeInput.value,
+        breakTime: breakTime,
         hours: calculatedHours,
         rate: rate,
         status: statusInput.value
@@ -213,6 +219,7 @@ function saveRecord(e) {
     // Reset form
     startTimeInput.selectedIndex = 0;
     endTimeInput.selectedIndex = 0;
+    breakTimeInput.value = "0";
     calculatedHoursEl.innerText = '0';
     
     // Update view if the new record is in the currently viewed week
@@ -390,6 +397,7 @@ exportBtn.addEventListener('click', () => {
 clearBtn.addEventListener('click', () => {
     startTimeInput.selectedIndex = 0;
     endTimeInput.selectedIndex = 0;
+    breakTimeInput.value = "0";
     hourlyRateInput.value = '';
     calculatedHoursEl.innerText = '0';
 });
