@@ -32,6 +32,7 @@ const breakTimeInput = document.getElementById('breakTime');
 const calculatedHoursEl = document.getElementById('calculatedHours');
 const hourlyRateInput = document.getElementById('hourlyRate');
 const statusInput = document.getElementById('status');
+const supervisorInput = document.getElementById('supervisor');
 const recordsList = document.getElementById('recordsList');
 
 const totalEarnedEl = document.getElementById('totalEarned');
@@ -186,7 +187,8 @@ function saveRecord(e) {
         breakTime: breakTime,
         hours: calculatedHours,
         rate: rate,
-        status: statusInput.value
+        status: statusInput.value,
+        supervisor: supervisorInput.value.trim()
     };
     
     // Save rate for next time
@@ -199,6 +201,7 @@ function saveRecord(e) {
     startTimeInput.value = '';
     endTimeInput.value = '';
     breakTimeInput.value = "0";
+    supervisorInput.value = '';
     calculatedHoursEl.innerText = '0';
     
     // Update view if the new record is in the currently viewed week
@@ -302,10 +305,15 @@ function updateUI() {
                 ? `<span style="font-size: 0.8rem; color: var(--text-muted); display: block;">${to12hFormat(record.startTime)} - ${to12hFormat(record.endTime)}</span>`
                 : '';
                 
+            const supervisorInfo = record.supervisor 
+                ? `<span style="font-size: 0.8rem; color: var(--text-muted); display: block;">Supervisor: ${record.supervisor}</span>`
+                : '';
+                
             li.innerHTML = `
                 <div class="record-info">
                     <span class="record-date">${formatDate(record.date)}</span>
                     ${timeInfo}
+                    ${supervisorInfo}
                     <span class="record-hours">
                         ${record.rate ? `<strong>$${(record.hours * record.rate).toFixed(2)}</strong> (${parseFloat(record.hours).toFixed(2).replace(/\.00$/, '')}h)` : `${parseFloat(record.hours).toFixed(2).replace(/\.00$/, '')} horas`}
                     </span>
@@ -378,6 +386,7 @@ clearBtn.addEventListener('click', () => {
     endTimeInput.value = '';
     breakTimeInput.value = "0";
     hourlyRateInput.value = '';
+    supervisorInput.value = '';
     calculatedHoursEl.innerText = '0';
 });
 
